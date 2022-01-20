@@ -22,13 +22,33 @@ class ModeloController extends Controller{
         $modelos = array();
 
         //verifica se um determinado parâmetro no request existe/está definido
+        if ($request->has('atributos_marca')) {
+            $atributos_marca = $request->atributos_marca;
+            $modelos = $this->modelo->with('marca:id,'.$atributos_marca);
+        }else{
+            $modelos = $this->modelo->with('marca');
+        }
+
+        if ($request->has('filtro')) {
+            //dd(explode(':', $request->filtro));
+            $filtros = explode(';', $request->filtro);
+
+            foreach ($filtros as $key => $condicao) {
+                $condicoes = explode(':', $condicao);
+                $modelos = $modelos->where($condicoes[0], $condicoes[1], $condicoes[2]);
+            }
+            
+            
+        }
+
         if ($request->has('atributos')) {
             //dd($request->atributos);
             $atributos = $request->atributos;
+            
+            $modelos = $modelos->selectRaw($atributos.',marca_id')->get();
 
-            $modelos = $this->modelo->selectRaw($atributos.',marca_id')->with('marca')->get();
         }else{
-            $modelos = $this->modelo->with('marca')->get();
+            $modelos = $modelos->get();
         }
 
         //$this->modelo->with('marca')->get()
