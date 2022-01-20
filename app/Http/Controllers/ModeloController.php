@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Modelo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Repositories\ModeloRepository;
 
 class ModeloController extends Controller{
 
@@ -18,7 +19,36 @@ class ModeloController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){ 
+
+        $modeloRepository = new ModeloRepository($this->modelo);
+
+        if ($request->has('atributos_marca')) {
+            $atributos_marca = 'marca:id,'.$request->atributos_marca;
+
+
+            $modeloRepository->selectAtributosRegistrosRelacionados($atributos_marca);
+        }else{
+            
+            $modeloRepository->selectAtributosRegistrosRelacionados('marca');
+        }
+
+
+        if ($request->has('filtro')) {
+            //dd(explode(':', $request->filtro));
+            $modeloRepository->filtro($request->filtro);
+        }
+
+        if ($request->has('atributos')) {
+            $modeloRepository->selectAtributos($request->atributos);
+
+        }
+
         
+        return response()->json($modeloRepository->getResultado(),200); 
+
+
+
+        /*-------------------------------
         $modelos = array();
 
         //verifica se um determinado parâmetro no request existe/está definido
@@ -55,6 +85,8 @@ class ModeloController extends Controller{
         return response()->json($modelos,200); 
         // método all() cria um objeto de consulta e executa ela pelo get() = collection
         // por meio do método get diretamente temos a possibilidade de modificar a consulta previamente
+
+        -------------------------------------------*/
     }
 
     /**
