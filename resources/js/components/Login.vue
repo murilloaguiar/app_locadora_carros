@@ -2,14 +2,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            {{email}} - {{ password }}
+            
             <div class="card">
                 <div class="card-header">Login</div>
-
                 <div class="card-body">
                     <form method="POST" action="" @submit.prevent="login($event)">
                         
-                        <input type="hidden" name="_token" :value="csrf_token">
+                        <input type="hidden" name="_token" :value="csrf">
 
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">Email</label>
@@ -64,7 +63,7 @@
 
 <script>
     export default{
-        props: ['csrf_token'],//análoga ao data
+        props: ['csrf'],//análoga ao data
         data(){
             return {
                 email: '',
@@ -82,7 +81,7 @@
                     }),
                 }
                 fetch(url, configuracao)
-                    .then(response => console.log(response))
+                    .then(response => response.json())
                     .then(data => {
                         if(data.token){
                             document.cookie = 'token='+data.token+';SameSite=Lax'
