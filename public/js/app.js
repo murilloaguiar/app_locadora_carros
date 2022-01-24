@@ -5543,6 +5543,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -29099,7 +29123,11 @@ var render = function () {
                         staticClass: "btn btn-primary btn-sm float-right",
                         attrs: { type: "submit" },
                       },
-                      [_vm._v("\n                Pesquisar\n                ")]
+                      [
+                        _vm._v(
+                          "\n                    Pesquisar\n                    "
+                        ),
+                      ]
                     ),
                   ]
                 },
@@ -29128,7 +29156,11 @@ var render = function () {
                         staticClass: "btn btn-primary btn-sm float-right",
                         attrs: { type: "button" },
                       },
-                      [_vm._v("\n                Adicionar\n                ")]
+                      [
+                        _vm._v(
+                          "\n                    Adicionar\n                    "
+                        ),
+                      ]
                     ),
                   ]
                 },
@@ -29140,9 +29172,88 @@ var render = function () {
         1
       ),
     ]),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary",
+        attrs: {
+          type: "button",
+          "data-bs-toggle": "modal",
+          "data-bs-target": "#exampleModal",
+        },
+      },
+      [_vm._v("\n    Launch demo modal\n    ")]
+    ),
+    _vm._v(" "),
+    _vm._m(0),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "exampleModal",
+          tabindex: "-1",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true",
+        },
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c(
+                "h5",
+                {
+                  staticClass: "modal-title",
+                  attrs: { id: "exampleModalLabel" },
+                },
+                [_vm._v("Modal title")]
+              ),
+              _vm._v(" "),
+              _c("button", {
+                staticClass: "btn-close",
+                attrs: {
+                  type: "button",
+                  "data-bs-dismiss": "modal",
+                  "aria-label": "Close",
+                },
+              }),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _vm._v("\n                    ...\n                "),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", "data-bs-dismiss": "modal" },
+                },
+                [_vm._v("Close")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", attrs: { type: "button" } },
+                [_vm._v("Save")]
+              ),
+            ]),
+          ]),
+        ]),
+      ]
+    )
+  },
+]
 render._withStripped = true
 
 
