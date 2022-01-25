@@ -13,7 +13,7 @@
                 <tr v-for="objeto, chave in dadosFiltrados" :key="chave">
                     <td v-for="valor, chaveValor in objeto" :key="chaveValor">
                         <span v-if="titulos[chaveValor].tipo=='texto'">{{valor}}</span>
-                        <span v-if="titulos[chaveValor].tipo=='data'">{{valor.toDateString()}}</span>
+                        <span v-if="titulos[chaveValor].tipo=='data'">{{valor}}</span>
                         <span v-if="titulos[chaveValor].tipo=='imagem'">
                             <img :src="'/storage/'+valor" :alt="'marca-'+valor" width="35" height="35">
                         </span>

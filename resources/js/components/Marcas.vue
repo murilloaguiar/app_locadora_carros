@@ -53,9 +53,25 @@
                     </template>
 
                     <template v-slot:rodape>
-                        <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#modalMarca">
-                        Adicionar
-                        </button>
+                        <div class="row">
+                            <div class="col-10">
+                                <paginate-component>
+                                    <li v-for="link, key in marcas.links" :key="key" class="page-item">
+                                        <a class="page-link" href="#" v-html="link.label"></a>
+                                    </li>
+                                    
+                                </paginate-component>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal" data-bs-target="#modalMarca">
+                                Adicionar
+                                </button>
+                            </div>
+
+                            
+                        </div>
+                        
+                        
                     </template>
 
                 </card-component>
@@ -133,7 +149,9 @@
                 arquivoImagem: [],
                 transacaoStatus: '',
                 transacaoDetalhes: {},
-                marcas: []
+                marcas: {
+                    data: []
+                }
             }
         },
 
