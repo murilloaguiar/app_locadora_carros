@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-12">
 
                 <!-- Card de busca -->
                 <card-component titulo="Busca de marcas">
@@ -41,7 +41,7 @@
                 <card-component titulo="Relação de marcas">
                     
                     <template v-slot:conteudo>
-                        <table-component>
+                        <table-component :dados="marcas" :titulos="['ID', 'Nome', 'Imagem']">
                             
                         </table-component>
                     </template>
@@ -61,12 +61,14 @@
         <!-- Modal -->
         <modal-component id="modalMarca" titulo="Adicionar marca">
             
+            <!-- Alerts Modal--->
             <template v-slot:alertas> 
-                <alert-component tipo="success"></alert-component>
-                <alert-component tipo="danger"></alert-component>
+                <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Cadastro realizado com sucesso" v-if="transacaoStatus == 'adicionado'"></alert-component>
+                <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar cadastrar a marca" v-if="transacaoStatus == 'erro'"></alert-component>
             </template>
+            <!-- /Alerts Modal--->
 
-
+            <!-- Conteúdo Modal- Formulário --->
             <template v-slot:conteudo>
 
                 <div class="form-group">
@@ -88,13 +90,20 @@
                 </div>
 
             </template>
+            <!-- /Conteúdo Modal- Formulário --->
 
+            <!-- Rodapé Modal--->
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
             </template>
+            <!-- /Rodapé Modal--->
 
         </modal-component>
+        <!-- /Modal -->
+
+        
+
     </div>
 </template>
 
@@ -115,16 +124,40 @@
             return {
                 urlBase:'http://localhost:8000/api/v1/marca',
                 nomeMarca: '',
-                arquivoImagem: []
+                arquivoImagem: [],
+                transacaoStatus: '',
+                transacaoDetalhes: {},
+                marcas: []
             }
         },
+
         methods:{
+            carregarLista(){
+
+                let config = {
+                    headers: {                      
+                        'Accept':'application/json',
+                        'Authorization': this.token
+                    }
+                }
+
+                axios.get(this.urlBase, config)
+                    .then(response => {
+                        this.marcas = response.data
+                        //console.log(this.marcas)
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+
+                    })
+            },
+
             carregarImagem(event){
                 this.arquivoImagem = event.target.files
             },
 
             salvar(){
-                console.log(this.nomeMarca, this.arquivoImagem)
+                //console.log(this.nomeMarca, this.arquivoImagem)
 
                 let formData = new FormData()
                 formData.append('nome', this.nomeMarca)
@@ -140,12 +173,27 @@
 
                 axios.post(this.urlBase, formData, config)
                     .then(response =>{
-                        console.log(response)
+                        //console.log(response)
+                        this.transacaoDetalhes = {
+                            mensagem: 'Id do registro: '+response.data.id
+                        }
+                        this.transacaoStatus = 'adicionado'
                     })
                     .catch(errors => {
-                        console.log(errors)
+                        
+                        this.transacaoStatus = 'erro'
+                        this.transacaoDetalhes = {
+                            mensagem: errors.response.data.message,
+                            dados: errors.response.data.errors
+                        }
+                        //errors.response.data.message
                     })
             }
+
+        },
+
+        mounted(){
+            this.carregarLista()
         }
     }
 
