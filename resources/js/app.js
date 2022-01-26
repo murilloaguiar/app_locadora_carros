@@ -15,7 +15,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state:{
-        teste: 'Teste de recuperação de valor da store do vuex'
+        item: {
+            
+        }
     } //atributos disponíveis para todos os componentes
 })
 
