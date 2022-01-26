@@ -4,7 +4,14 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col" v-for="titulo, key in titulos" :key="key">{{titulo.titulo}}</th>
+
+                    <th scope="col" v-for="titulo, key in titulos" :key="key">
+                        {{titulo.titulo}}
+                    </th>
+
+                    <th v-if="visualizar || atualizar || remover">
+
+                    </th>
                     
                 </tr>
             </thead>
@@ -17,9 +24,12 @@
                         <span v-if="titulos[chaveValor].tipo=='imagem'">
                             <img :src="'/storage/'+valor" :alt="'marca-'+valor" width="35" height="35">
                         </span>
+                    </td>
 
-                    
-                        
+                    <td v-if="visualizar || atualizar || remover">
+                        <button v-if="visualizar" class="btn btn-outline-success btn-sm">Visualizar</button>
+                        <button v-if="atualizar" class="btn btn-outline-primary btn-sm">Atualizar</button>
+                        <button v-if="remover" class="btn btn-outline-danger btn-sm">Remover</button>
                     </td>
                 </tr>
 
@@ -56,7 +66,7 @@
 
 <script>
 export default {
-    props: ['dados', 'titulos'],
+    props: ['dados', 'titulos', 'atualizar', 'visualizar', 'remover'],
 
     computed: {
         dadosFiltrados(){
@@ -80,7 +90,7 @@ export default {
                 //console.log(itemFiltrado)
                 dadosFiltrados.push(itemFiltrado)
             })
-            console.log(dadosFiltrados)
+            //console.log(dadosFiltrados)
 
             return dadosFiltrados //retornar um array de objetos
         }
