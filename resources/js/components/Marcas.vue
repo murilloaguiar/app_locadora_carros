@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <!-- Cards -->
         <div class="row justify-content-center">
             <div class="col-md-12">
 
@@ -44,7 +45,11 @@
                     <template v-slot:conteudo>
                         <table-component 
                         :dados="marcas.data" 
-                        :visualizar = "true"
+                        :visualizar="{
+                            visivel: true,
+                            dataBsToggle: 'modal',
+                            dataBsTarget: '#modalMarcaVisualizar'
+                        }"
                         :atualizar = "true"
                         :remover = "true"
                         :titulos="{
@@ -89,8 +94,9 @@
 
             </div>
         </div>
+        <!-- /Cards -->
 
-        <!-- Modal -->
+        <!-- Modal de inclusão de marca -->
         <modal-component id="modalMarca" titulo="Adicionar marca">
             
             <!-- Alerts Modal--->
@@ -134,7 +140,15 @@
         </modal-component>
         <!-- /Modal -->
 
-        
+        <!-- Modal de visualização de marca -->
+        <modal-component id="modalMarcaVisualizar" titulo="Visualizar marca">
+            <template v-slot:alertas></template>
+            <template v-slot:conteudo>teste</template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </template>
+        </modal-component>
+        <!-- /Modal de visualização de marca -->
 
     </div>
 </template>
