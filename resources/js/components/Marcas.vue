@@ -51,7 +51,11 @@
                             dataBsTarget: '#modalMarcaVisualizar'
                         }"
                         :atualizar = "true"
-                        :remover = "true"
+                        :remover ="{
+                            visivel: true,
+                            dataBsToggle: 'modal',
+                            dataBsTarget: '#modalMarcaRemover'
+                        }"
                         :titulos="{
                             id:{titulo: 'ID', tipo: 'texto'},
                             nome:{titulo: 'Nome', tipo: 'texto'},
@@ -170,6 +174,41 @@
         </modal-component>
         <!-- /Modal de visualização de marca -->
 
+        <!-- Modal de exclusão de marca -->
+        <modal-component id="modalMarcaRemover" titulo="Remover marca">
+            <template v-slot:alertas>
+
+                <alert-component v-if="$store.state.transacao.status == 'sucesso'" tipo="success" titulo="Transação realizada" :detalhes="$store.state.transacao">
+                    
+                </alert-component>
+
+                <alert-component v-if="$store.state.transacao.status == 'erro'" tipo="danger" titulo="Erro na transação" :detalhes="$store.state.transacao">
+                    
+                </alert-component>
+
+
+            </template>
+
+            <template v-slot:conteudo v-if="$store.state.transacao.status!='sucesso'">
+                
+                <input-container-component titulo="id">
+                    <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+                </input-container-component>
+
+                <input-container-component titulo="Nome da marca">
+                    <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
+                </input-container-component>
+
+            </template>
+
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button v-if="$store.state.transacao.status!='sucesso'" type="button" class="btn btn-danger" @click="remover()">Remover</button>
+            </template>
+
+        </modal-component>
+        <!-- /Modal de exclusão de marca -->
+
     </div>
 </template>
 
@@ -206,6 +245,41 @@
         },
 
         methods:{
+
+            remover(){
+                let confirmacao = confirm('tem certeza que deseja remover esse registro?')
+
+                if (!confirmacao) 
+                    return false;
+
+                let url = this.urlBase + '/' + this.$store.state.item.id
+
+                //console.log(url)
+
+                let config = {
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: this.token
+                    }
+                }
+
+                let formData = new FormData()
+                formData.append('_method','delete')
+
+                
+
+                axios.post(url, formData, config)
+                    .then(response=> {
+                        this.$store.state.transacao.status = 'sucesso'
+                        this.$store.state.transacao.mensagem = response.data.msg
+                        this.carregarLista()
+                    })
+                    .catch(errors=> {
+                        this.$store.state.transacao.status = 'erro'
+                        this.$store.state.transacao.mensagem = errors.response.data.erro
+                        
+                    })
+            },
 
             pesquisar(){
                 //console.log(this.busca)

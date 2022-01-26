@@ -26,8 +26,8 @@ class CreateLocacoesTable extends Migration
             $table->timestamps();
 
             //foreign key (constraints)
-            $table->foreign('cliente_id')->references('id')->on('clientes');
-            $table->foreign('carro_id')->references('id')->on('carros');
+            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('carro_id')->references('id')->on('carros')->onDelete('cascade')->onUpdate('cascade');;
         });
     }
 
