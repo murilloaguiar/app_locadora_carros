@@ -50,7 +50,11 @@
                             dataBsToggle: 'modal',
                             dataBsTarget: '#modalMarcaVisualizar'
                         }"
-                        :atualizar = "true"
+                        :atualizar ="{
+                            visivel: true,
+                            dataBsToggle: 'modal',
+                            dataBsTarget: '#modalMarcaAtualizar'
+                        }"
                         :remover ="{
                             visivel: true,
                             dataBsToggle: 'modal',
@@ -119,16 +123,13 @@
                         <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp" placeholder="Nome da marca"
                         v-model="nomeMarca"/>
 
-                    </input-container-component>
-
-                    {{ nomeMarca }}
+                    </input-container-component>               
 
                     <input-container-component titulo="Imagem" id="novaImagem" id-help="novoImagemHelp" texto-ajuda="Seleciona uma imagem PNG">
 
                         <input type="file" class="form-control-file" id="inputNome" aria-describedby="novoImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)"/>
 
                     </input-container-component>
-                    {{arquivoImagem}}
                 </div>
 
             </template>
@@ -142,7 +143,7 @@
             <!-- /Rodapé Modal--->
 
         </modal-component>
-        <!-- /Modal -->
+        <!-- /Modal de inclusão de marca-->
 
         <!-- Modal de visualização de marca -->
         <modal-component id="modalMarcaVisualizar" titulo="Visualizar marca">
@@ -209,6 +210,48 @@
         </modal-component>
         <!-- /Modal de exclusão de marca -->
 
+        <!-- Modal de atualização de marca -->
+        <modal-component id="modalMarcaAtualizar" titulo="Atualizar marca">
+            
+            <!-- Alerts Modal--->
+            <template v-slot:alertas> 
+                <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Cadastro realizado com sucesso" v-if="transacaoStatus == 'adicionado'"></alert-component>
+                <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar cadastrar a marca" v-if="transacaoStatus == 'erro'"></alert-component>
+            </template>
+            <!-- /Alerts Modal--->
+
+            <!-- Conteúdo Modal- Formulário --->
+            <template v-slot:conteudo>
+
+                <div class="form-group">
+                    <input-container-component titulo="Nome da marca" id="novoNomeAtualizado" id-help="novoAtualizadoNomeHelp" texto-ajuda="Informe o nome da marca">
+
+                        <input type="text" class="form-control" id="novoNome" aria-describedby="novoAtualizadoNomeHelp" placeholder="Nome da marca"
+                        v-model="nomeMarca"/>
+
+                    </input-container-component>
+
+                    <input-container-component titulo="Imagem" id="novaImagemAtualizada" id-help="novoImagemAtualizadaHelp" texto-ajuda="Seleciona uma imagem PNG">
+
+                        <input type="file" class="form-control-file" id="inputNome" aria-describedby="novoImagemAtualizadaHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)"/>
+
+                    </input-container-component>
+                    
+                </div>
+
+            </template>
+            <!-- /Conteúdo Modal- Formulário --->
+
+            <!-- Rodapé Modal--->
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" @click="atualizar()">Atualizar</button>
+            </template>
+            <!-- /Rodapé Modal--->
+
+        </modal-component>
+        <!-- /Modal de atualização de marca -->
+
     </div>
 </template>
 
@@ -245,6 +288,10 @@
         },
 
         methods:{
+
+            atualizar(){
+                console.log(this.$store.state.item)
+            },
 
             remover(){
                 let confirmacao = confirm('tem certeza que deseja remover esse registro?')

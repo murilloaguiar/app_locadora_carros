@@ -9,7 +9,7 @@
                         {{titulo.titulo}}
                     </th>
 
-                    <th v-if="visualizar.visivel || atualizar || remover.visivel ">
+                    <th v-if="visualizar.visivel || atualizar.visivel || remover.visivel ">
 
                     </th>
                     
@@ -26,11 +26,11 @@
                         </span>
                     </td>
 
-                    <td v-if="visualizar.visivel || atualizar || remover.visivel ">
+                    <td v-if="visualizar.visivel || atualizar.visivel || remover.visivel ">
 
                         <button v-if="visualizar.visivel" class="btn btn-outline-success btn-sm" :data-bs-toggle="visualizar.dataBsToggle" :data-bs-target="visualizar.dataBsTarget" @click="setStore(objeto)"> Visualizar</button>
 
-                        <button v-if="atualizar" class="btn btn-outline-primary btn-sm">Atualizar</button>
+                        <button v-if="atualizar.visivel" class="btn btn-outline-primary btn-sm" :data-bs-toggle="atualizar.dataBsToggle" :data-bs-target="atualizar.dataBsTarget" @click="setStore(objeto)">Atualizar</button>
 
                         <button v-if="remover.visivel" class="btn btn-outline-danger btn-sm" :data-bs-toggle="remover.dataBsToggle" :data-bs-target="remover.dataBsTarget" @click="setStore(objeto)">Remover</button>
                     </td>
