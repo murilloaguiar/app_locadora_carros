@@ -127,7 +127,7 @@
 
                     <input-container-component titulo="Imagem" id="novaImagem" id-help="novoImagemHelp" texto-ajuda="Seleciona uma imagem PNG">
 
-                        <input type="file" class="form-control-file" id="inputNome" aria-describedby="novoImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)"/>
+                        <input type="file" class="form-control-file" id="novaImagem" aria-describedby="novoImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)"/>
 
                     </input-container-component>
                 </div>
@@ -213,41 +213,46 @@
         <!-- Modal de atualização de marca -->
         <modal-component id="modalMarcaAtualizar" titulo="Atualizar marca">
             
-            <!-- Alerts Modal--->
+            <!-- Alerts Modal  de atualização --->
             <template v-slot:alertas> 
-                <alert-component tipo="success" :detalhes="transacaoDetalhes" titulo="Cadastro realizado com sucesso" v-if="transacaoStatus == 'adicionado'"></alert-component>
-                <alert-component tipo="danger" :detalhes="transacaoDetalhes" titulo="Erro ao tentar cadastrar a marca" v-if="transacaoStatus == 'erro'"></alert-component>
-            </template>
-            <!-- /Alerts Modal--->
+                <alert-component v-if="$store.state.transacao.status == 'sucesso'" tipo="success" titulo="Transação realizada" :detalhes="$store.state.transacao">
+                    
+                </alert-component>
 
-            <!-- Conteúdo Modal- Formulário --->
+                <alert-component v-if="$store.state.transacao.status == 'erro'" tipo="danger" titulo="Erro na transação" :detalhes="$store.state.transacao">
+                    
+                </alert-component>
+            </template>
+            <!-- /Alerts Modal  de atualização --->
+
+            <!-- Conteúdo Modal de atualização - Formulário --->
             <template v-slot:conteudo>
 
                 <div class="form-group">
                     <input-container-component titulo="Nome da marca" id="novoNomeAtualizado" id-help="novoAtualizadoNomeHelp" texto-ajuda="Informe o nome da marca">
 
                         <input type="text" class="form-control" id="novoNome" aria-describedby="novoAtualizadoNomeHelp" placeholder="Nome da marca"
-                        v-model="nomeMarca"/>
+                        v-model="$store.state.item.nome"/>
 
                     </input-container-component>
 
                     <input-container-component titulo="Imagem" id="novaImagemAtualizada" id-help="novoImagemAtualizadaHelp" texto-ajuda="Seleciona uma imagem PNG">
 
-                        <input type="file" class="form-control-file" id="inputNome" aria-describedby="novoImagemAtualizadaHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)"/>
+                        <input type="file" class="form-control-file" id="novaImagemAtualizada" aria-describedby="novoImagemAtualizadaHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)"/>
 
                     </input-container-component>
                     
                 </div>
 
             </template>
-            <!-- /Conteúdo Modal- Formulário --->
+            <!-- /Conteúdo Modal de atualização - Formulário --->
 
-            <!-- Rodapé Modal--->
+            <!-- Rodapé Modal de atualização --->
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" @click="atualizar()">Atualizar</button>
             </template>
-            <!-- /Rodapé Modal--->
+            <!-- /Rodapé Modal de atualização --->
 
         </modal-component>
         <!-- /Modal de atualização de marca -->
@@ -290,7 +295,40 @@
         methods:{
 
             atualizar(){
-                console.log(this.$store.state.item)
+
+                let url = this.urlBase + '/' + this.$store.state.item.id
+
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Accept:'application/json',
+                        Authorization: this.token
+                    }
+                }
+
+                let formData = new FormData()
+                formData.append('_method', 'PATCH')
+                formData.append('nome', this.$store.state.item.nome)
+                if (this.arquivoImagem[0]) {
+                    formData.append('imagem', this.arquivoImagem[0])
+                }
+                
+
+                axios.post(url, formData, config)
+                    .then(response => {
+                        novaImagemAtualizada.value = '' //atribuindo vazio para o campo imagem após o registro ter sido atualizado
+                        
+                        this.$store.state.transacao.status = 'sucesso'
+                        this.$store.state.transacao.mensagem = 'Registro de marca atualizado com sucesso'
+                        this.carregarLista()
+                    })
+                    .catch(errors=>{
+                        
+                        this.$store.state.transacao.status = 'erro'
+                        this.$store.state.transacao.mensagem = errors.response.data.message
+                        this.$store.state.transacao.dados = errors.response.data.errors
+                    })
+
             },
 
             remover(){
@@ -324,7 +362,7 @@
                     .catch(errors=> {
                         this.$store.state.transacao.status = 'erro'
                         this.$store.state.transacao.mensagem = errors.response.data.erro
-                        
+
                     })
             },
 
@@ -406,8 +444,8 @@
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Accept':'application/json',
-                        'Authorization': this.token
+                        Accept:'application/json',
+                        Authorization: this.token
                     }
                 }
 

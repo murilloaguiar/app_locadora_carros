@@ -20,7 +20,8 @@ const store = new Vuex.Store({
         },
         transacao: {
             status:'',
-            mensagem: ''
+            mensagem: '',
+            dados: ''
         }
     } //atributos disponíveis para todos os componentes
 })
