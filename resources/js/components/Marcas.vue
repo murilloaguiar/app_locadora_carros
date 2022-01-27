@@ -262,16 +262,6 @@
 
 <script>
     export default{
-        computed:{
-            token(){
-                let token = document.cookie.split(';').find(indice =>{
-                    return indice.includes('token=')
-                })
-                token = token.split('=')[1]
-                token = 'Bearer ' + token
-                return token
-            }
-        },
 
         data(){
             return {
@@ -300,9 +290,7 @@
 
                 let config = {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Accept:'application/json',
-                        Authorization: this.token
+                        'Content-Type': 'multipart/form-data'
                     }
                 }
 
@@ -341,19 +329,10 @@
 
                 //console.log(url)
 
-                let config = {
-                    headers: {
-                        Accept: 'application/json',
-                        Authorization: this.token
-                    }
-                }
-
                 let formData = new FormData()
                 formData.append('_method','delete')
 
-                
-
-                axios.post(url, formData, config)
+                axios.post(url, formData)
                     .then(response=> {
                         this.$store.state.transacao.status = 'sucesso'
                         this.$store.state.transacao.mensagem = response.data.msg
@@ -412,14 +391,7 @@
 
                 let url = this.urlBase +'?'+ this.urlPaginacao + this.urlFiltro
 
-                let config = {
-                    headers: {                      
-                        'Accept':'application/json',
-                        'Authorization': this.token
-                    }
-                }
-
-                axios.get(url, config)
+                axios.get(url)
                     .then(response => {
                         this.marcas = response.data
                         //console.log(this.marcas)
@@ -443,9 +415,7 @@
 
                 let config = {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Accept:'application/json',
-                        Authorization: this.token
+                        'Content-Type': 'multipart/form-data'
                     }
                 }
 
